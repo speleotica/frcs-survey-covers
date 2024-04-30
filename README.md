@@ -1,3 +1,11 @@
+This is a simple tool to generate survey cover sheets.
+All you have to do is open or drag and drop a STAT_sum file and it will
+show cover sheets for all the trips in the file; then you can print to PDF.
+
+Use it here: https://speleotica.github.io/frcs-survey-covers/
+
+# Development
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

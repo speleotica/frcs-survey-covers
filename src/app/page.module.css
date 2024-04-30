@@ -1,5 +1,6 @@
 .main {
   display: flex;
+  position: relative;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
@@ -24,6 +25,10 @@
 .statSumField > label {
   display: block;
   margin-bottom: 0.5em;
+}
+
+.printButton {
+  padding: 0 8px;
 }
 
 .coverPage {

@@ -136,6 +136,14 @@ export default function Home() {
             placeholder="Select STAT_sum file"
             onChange={(e) => setFile(e.currentTarget.files?.[0])}
           />
+          {summaries != null && (
+            <button
+              className={styles.printButton}
+              onClick={() => window.print()}
+            >
+              Print
+            </button>
+          )}
         </div>
       )}
       <div>
