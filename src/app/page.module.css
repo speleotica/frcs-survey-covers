@@ -21,13 +21,17 @@
   }
 }
 
-.statSumField {
+.statSumField > label {
+  display: block;
+  margin-bottom: 0.5em;
 }
 
 .coverPage {
   font-family: serif;
   font-size: 18px;
   width: 8.5in;
+  max-height: 9in;
+  overflow: hidden;
   padding: 1in;
   background-color: white;
   color: black;

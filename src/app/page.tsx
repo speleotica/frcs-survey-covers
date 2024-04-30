@@ -4,7 +4,7 @@ import * as React from "react";
 import styles from "./page.module.css";
 import { parseFrcsTripSummaryFile } from "@speleotica/frcsdata/web";
 import { type FrcsTripSummaryFile } from "@speleotica/frcsdata";
-import { chunk } from "lodash";
+import { chunk, range } from "lodash";
 
 export default function Home() {
   const [file, setFile] = React.useState<File | undefined>(undefined);
@@ -28,9 +28,10 @@ export default function Home() {
 
   const summaries = React.useMemo(
     () =>
-      tripSummaryFile?.tripSummaries?.map((summary) =>
-        summary ? (
-          <div key={summary.tripIndex} className={styles.coverPage}>
+      range(tripSummaryFile?.tripSummaries?.length ?? 0).map((index) => {
+        const summary = tripSummaryFile?.tripSummaries?.[index];
+        return summary ? (
+          <div key={index} className={styles.coverPage}>
             <div className={styles.tripNumber}>{summary.tripNumber}</div>
             <div className={styles.date}>
               {String(summary.date.getMonth() + 1).padStart(2, " ")}/
@@ -72,19 +73,25 @@ export default function Home() {
               </tbody>
             </table>
           </div>
-        ) : null
-      ),
+        ) : (
+          <div key={index} className={styles.coverPage} />
+        );
+      }),
     [tripSummaryFile?.tripSummaries]
   );
 
   return (
     <main className={styles.main}>
-      <input
-        type="file"
-        className={styles.statSumField}
-        placeholder="Select STAT_sum file"
-        onChange={(e) => setFile(e.currentTarget.files?.[0])}
-      />
+      <div className={styles.statSumField}>
+        <label htmlFor="statSumField">Select a STAT_sum file:</label>
+        <input
+          id="statSumField"
+          type="file"
+          className={styles.statSumField}
+          placeholder="Select STAT_sum file"
+          onChange={(e) => setFile(e.currentTarget.files?.[0])}
+        />
+      </div>
       <div>{summaries || error}</div>
     </main>
   );
