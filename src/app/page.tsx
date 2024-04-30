@@ -2,31 +2,29 @@
 
 import * as React from "react";
 import styles from "./page.module.css";
-import {
-  FrcsTripSummaryFile,
-  parseFrcsTripSummaryFile,
-} from "@speleotica/frcsdata";
+import { parseFrcsTripSummaryFile } from "@speleotica/frcsdata/web";
+import { type FrcsTripSummaryFile } from "@speleotica/frcsdata";
 import { chunk } from "lodash";
 
 export default function Home() {
-  const [statSum, setStatSum] = React.useState("");
+  const [file, setFile] = React.useState<File | undefined>(undefined);
+  const [error, setError] = React.useState<string | undefined>(undefined);
   const [tripSummaryFile, setTripSummaryFile] =
     React.useState<FrcsTripSummaryFile | null>(null);
 
   React.useEffect(() => {
-    let canceled = false;
-    async function* getLines() {
-      yield* statSum.split(/\r\n?|\n/gm);
+    if (file) {
+      (async () => {
+        try {
+          setTripSummaryFile(await parseFrcsTripSummaryFile(file));
+          setError(undefined);
+        } catch (error) {
+          setTripSummaryFile(null);
+          setError(error instanceof Error ? error.message : String(error));
+        }
+      })();
     }
-    (async () => {
-      setTripSummaryFile(
-        await parseFrcsTripSummaryFile("STAT_sum.txt", getLines())
-      );
-    })();
-    return () => {
-      canceled;
-    };
-  }, [statSum]);
+  }, [file]);
 
   const summaries = React.useMemo(
     () =>
@@ -81,14 +79,13 @@ export default function Home() {
 
   return (
     <main className={styles.main}>
-      <textarea
+      <input
+        type="file"
         className={styles.statSumField}
-        value={statSum}
-        onChange={(e) => setStatSum(e.currentTarget.value)}
-        placeholder="paste STAT_sum.txt here"
-        rows={5}
+        placeholder="Select STAT_sum file"
+        onChange={(e) => setFile(e.currentTarget.files?.[0])}
       />
-      <div>{summaries}</div>
+      <div>{summaries || error}</div>
     </main>
   );
 }
