@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  basePath: "/frcs-survey-covers",
+  basePath: process.env.NEXT_BASE_PATH || undefined,
   output: "export",
 };
 
